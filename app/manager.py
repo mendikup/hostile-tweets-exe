@@ -21,3 +21,4 @@ class Manager:
 
     def get_result(self):
         return self.processor.get_df_as_dictionary()
+

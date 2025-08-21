@@ -1,22 +1,28 @@
 import pandas as pd
-from app.fetcher import Fetcher
 import nltk
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 from app.helpers import get_weapon_list
 
-
-nltk.download('vader_lexicon')# Compute sentiment labels
-tweet = 'Skillcate is a great Youtube Channel to learn DataScience'
-score=SentimentIntensityAnalyzer().polarity_scores(tweet)
-
-
 class Processor:
 
     def __init__(self,data):
+        nltk.download('vader_lexicon')  # Compute sentiment labels
+        self.analaize = SentimentIntensityAnalyzer()
         self.data = pd.DataFrame(data)
-        print(self.data.head())
+
+    def express_sentiment(self):
+        self.data['sentiment'] = self.data['Text'].apply(self.get_sentiment_score)
 
 
+    def get_sentiment_score(self,txt):
+        score = self.analaize.polarity_scores(txt)
+        compound = score['compound']
+        if compound <= -0.5:
+            return "negative"
+        elif 0.5 < compound > -0.5 :
+            return "neutral"
+        else:
+            return "positive"
 
 
 
@@ -29,11 +35,11 @@ class Processor:
 
     def weapons_detected(self):
         self.data['weapons_detected'] = self.data['Text'].apply(Processor.check_weapon_in_text)
-        print(self.data.head().to_string())
 
-# TODO implement this function
-    # def express_sentiment(self):
-    #     self.df['sentiment'] = self.df['Text'].apply(Processor.check_sentiment)
+
+
+    def get_df_as_dictionary(self):
+        return self.data.to_dict(orient="records")
 
 
 
@@ -47,7 +53,6 @@ class Processor:
                 weapon = word
                 break
         return weapon
-
 
 
 

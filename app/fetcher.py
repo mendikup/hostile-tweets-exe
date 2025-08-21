@@ -16,7 +16,6 @@ class Fetcher:
 
 
     def get_all_data(self):
-        print(self.MONGO_URI)
         with MongoClient(self.MONGO_URI) as client:
             db = client[self.DB_NAME]
             collection = db[self.COLLECTION]
@@ -25,6 +24,4 @@ class Fetcher:
 
 
 
-# f= Fetcher()
-# print(f.get_all_data())
 
