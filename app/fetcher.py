@@ -12,8 +12,24 @@ class Fetcher:
         self.DB_NAME = os.getenv("DB_NAME")
         self.PASSWORD = os.getenv("PASSWORD")
         self.COLLECTION = os.getenv("COLLECTION")
-        self.MONGO_URI = f"mongodb+srv://{self.USER}:{self.PASSWORD}@{self.DB_NAME}.gurutam.mongodb.net/"
 
+        # Check if any critical environment variables are missing
+        missing = [
+            name for name, val in [
+                ("USER", self.USER),
+                ("PASSWORD", self.PASSWORD),
+                ("DB_NAME", self.DB_NAME),
+                ("COLLECTION", self.COLLECTION),
+            ] if not val
+        ]
+        if missing:
+            raise ValueError(f"Missing required environment variables: {', '.join(missing)}")
+
+        # Build the MongoDB connection URI
+        self.MONGO_URI = (
+            f"mongodb+srv://{self.USER}:{self.PASSWORD}"
+            f"@{self.DB_NAME}.gurutam.mongodb.net/"
+        )
 
     def get_all_data(self):
         with MongoClient(self.MONGO_URI) as client:
