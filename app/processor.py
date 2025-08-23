@@ -10,31 +10,53 @@ class Processor:
         self.analaize = SentimentIntensityAnalyzer()
         self.data = pd.DataFrame(data)
 
+
+    def run_prepossessing(self):
+        self.find_rarest_word_per_tweet()
+        self.express_sentiment()
+        self.weapons_detected()
+
+
+
     def express_sentiment(self):
-        self.data['sentiment'] = self.data['Text'].apply(self.get_sentiment_score)
+        self.data['sentiment'] = self.data['Text'].apply(self._get_sentiment_score)
 
 
-    def get_sentiment_score(self,txt):
+    def _get_sentiment_score(self,txt):
         score = self.analaize.polarity_scores(txt)
         compound = score['compound']
         if compound <= -0.5:
             return "negative"
-        elif 0.5 < compound > -0.5 :
-            return "neutral"
-        else:
+
+        elif compound >= 0.5:
             return "positive"
+        else:
+            return "neutral"
 
 
+    def find_rarest_word_per_tweet(self):
+        # Ensure the required column is present
+        if 'Text' not in self.data.columns:
+            raise KeyError("Expected 'Text' column in input data")
 
-    def find_rarest_word_per_twwet(self):
-        text_column = self.data['Text']
-        rarest_word = text_column.map(lambda x: pd.Series(x.split()).value_counts().idxmin())
+        text_column = self.data['Text'].fillna("").astype(str).str.lower()
+        rarest_word = text_column.map(
+            lambda text: pd.Series(text.split()).value_counts().idxmin()
+        )
         self.data['the_rarest_word'] = rarest_word
 
 
 
+
     def weapons_detected(self):
-        self.data['weapons_detected'] = self.data['Text'].apply(Processor.check_weapon_in_text)
+        if 'Text' not in self.data.columns:
+            raise KeyError("Expected 'Text' column in input data")
+        self.data['weapons_detected'] = (
+            self.data['Text']
+            .fillna("")
+            .astype(str)
+            .apply(self.check_weapon_in_text)
+        )
 
 
 

@@ -8,14 +8,14 @@ class Manager:
         self.fetcher = Fetcher()
         data = self.fetcher.get_all_data()
         self.processor = Processor(data)
-        self.run_prepossessing()
 
-    def run_prepossessing(self):
-        print("starting analyzing...")
-        self.processor.find_rarest_word_per_twwet()
-        self.processor.express_sentiment()
-        self.processor.weapons_detected()
-        print("analyzing ended.")
+
+    def run(self):
+        print("analyzing process is starting...")
+        self.processor.run_prepossessing()
+        print("analyzing process is ended successfully...")
+        return self.processor.get_df_as_dictionary()
+
 
 
 
