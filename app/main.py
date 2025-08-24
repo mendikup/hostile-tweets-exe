@@ -7,8 +7,7 @@ from app.helpers import convert_bson_types
 
 
 app = FastAPI()
-
-
+manager = Manager()
 
 
 @app.get("/")
@@ -18,7 +17,6 @@ def root():
 
 @app.get("/analysis_information")
 def analysis_information():
-    manager = Manager()
     results =convert_bson_types(manager.run())
     return results
 

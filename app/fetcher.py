@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 import pandas as pd
 
 class Fetcher:
+    """Retrieve documents from a MongoDB collection."""
 
     load_dotenv()
 
@@ -35,7 +36,8 @@ class Fetcher:
         with MongoClient(self.MONGO_URI) as client:
             db = client[self.DB_NAME]
             collection = db[self.COLLECTION]
-            res =list(collection.find({},{"_id":0}))
+            # Return all documents while excluding the MongoDB-generated ``_id`` field
+            res = list(collection.find({}, {"_id": 0}))
             return res
 
 
