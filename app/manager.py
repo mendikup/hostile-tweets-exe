@@ -16,7 +16,7 @@ class Manager:
     def run(self):
         # Execute the full processing pipeline and return the results.
         print("analyzing process is starting...")
-        self.processor.run_prepossessing()
+        self.processor.run_processing()
         print("analyzing process is ended successfully...")
         return self.processor.get_df_as_dictionary()
 

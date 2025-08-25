@@ -11,7 +11,7 @@ class Processor:
         self.data = pd.DataFrame(data)
 
 
-    def run_prepossessing(self):
+    def run_processing(self):
         self.find_rarest_word_per_tweet()
         self.express_sentiment()
         self.weapons_detected()
@@ -55,7 +55,7 @@ class Processor:
             self.data['Text']
             .fillna("")
             .astype(str)
-            .apply(self.check_weapon_in_text)
+            .apply(self._check_weapon_in_text)
         )
 
 
@@ -66,8 +66,8 @@ class Processor:
 
 
 
-    @staticmethod
-    def check_weapon_in_text(text):
+
+    def _check_weapon_in_text(self,text):
         weapons_list = get_weapon_list()
         weapon = ""
         for word in text.split():
