@@ -15,8 +15,8 @@ def root():
     return {"status": "ok"}
 
 
-@app.get("/analysis_information")
-def analysis_information():
+@app.get("/analyze_data")
+def analyze_data():
     results =convert_bson_types(manager.run())
     return results
 
